@@ -1,0 +1,19 @@
+{
+  "name": "torqit/pimcore-command-locker-bundle",
+  "type": "pimcore-bundle",
+  "require": {
+    "pimcore/pimcore": "^10.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "TorqIT\\CommandLockerBundle\\": "src"
+    }
+  },
+  "extra": {
+    "pimcore": {
+      "bundles": [
+        "TorqIT\\CommandLockerBundle\\CommandLockerBundle"
+      ]
+    }
+  }
+}
