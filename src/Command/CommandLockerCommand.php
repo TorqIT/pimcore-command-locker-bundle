@@ -75,7 +75,6 @@ class CommandLockerCommand extends AbstractCommand
 
         $application->setAutoExit(true);
 
-
         return Command::SUCCESS;
     }
 
