@@ -68,11 +68,12 @@ class CommandLockerCommand extends AbstractCommand
             $errorMsg = $e->getMessage();
             $output->writeln("<error>Error running command: $errorMsg</error>");
             return Command::FAILURE;
+        } finally {
+            $output->writeln("Releasing lock $lockName", OutputInterface::VERBOSITY_NORMAL);
+            $lock->release();
         }
 
         $application->setAutoExit(true);
-        $output->writeln("Releasing lock $lockName", OutputInterface::VERBOSITY_NORMAL);
-        $lock->release();
 
 
         return Command::SUCCESS;
