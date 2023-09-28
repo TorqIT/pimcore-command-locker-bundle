@@ -2,7 +2,8 @@
   "name": "torqit/pimcore-command-locker-bundle",
   "type": "pimcore-bundle",
   "require": {
-    "pimcore/pimcore": "^10.0"
+    "pimcore/pimcore": "^10.0",
+    "symfony/lock": "^5.4"
   },
   "autoload": {
     "psr-4": {
