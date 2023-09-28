@@ -42,7 +42,7 @@ class CommandLockerCommand extends AbstractCommand
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $fullCommand = $input->getArgument(self::ARG_COMMAND_WITH_OPTIONS);
 
