@@ -7,6 +7,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Lock\LockFactory;
 
@@ -14,12 +15,7 @@ class CommandLockerCommand extends AbstractCommand
 {
     private const ARG_COMMAND_WITH_OPTIONS = 'command-with-options';
 
-    /**
-     * @var LockFactory|null
-     */
-    private $lockFactory = null;
-
-    public function __construct(LockFactory $lockFactory)
+    public function __construct(private LockFactory $lockFactory)
     {
         parent::__construct();
         $this->lockFactory = $lockFactory;
@@ -33,6 +29,13 @@ class CommandLockerCommand extends AbstractCommand
                 self::ARG_COMMAND_WITH_OPTIONS,
                 InputArgument::REQUIRED,
                 'Full command to run with all options'
+            )
+            ->addOption(
+                'block',
+                'b',
+                InputOption::VALUE_NONE,
+                'If the lock is not acquired, should the command wait till the lock becomes free.',
+                null
             );
     }
 
@@ -51,7 +54,13 @@ class CommandLockerCommand extends AbstractCommand
 
         $lock = $this->lockFactory->createLock($lockName, 60 * 60 * 24);
 
-        if (!$lock->acquire()) {
+        /** @var boolean $blocking */
+        $blocking = $input->getOption('block');
+        if ($blocking) {
+            $output->writeln("Waiting for lock...");
+        }
+
+        if (!$lock->acquire($blocking)) {
             $output->writeln("<error>Could not get lock for $lockName</error>", OutputInterface::VERBOSITY_NORMAL);
 
             return Command::FAILURE;
